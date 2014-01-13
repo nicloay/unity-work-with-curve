@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEditor;
 using UnityEditorInternal;
 using System.Reflection;
+using CurveExtended;
 
 public class CreateAnimation : Editor {
 	public static string GAME_OBJECT_NAME="gameObject";
@@ -17,15 +18,6 @@ public class CreateAnimation : Editor {
 	public static float[] stepValues = new float[]{
 		0,1,0,1,0
 	};
-
-	public static Keyframe[]  keyframes = new Keyframe[]{
-		KeyframeUtil.GetNew (0.0f,  0, TangentMode.Stepped),
-		KeyframeUtil.GetNew (0.1f,  1, TangentMode.Stepped),
-		KeyframeUtil.GetNew (0.2f,  0, TangentMode.Stepped),
-		KeyframeUtil.GetNew (0.3f,  1, TangentMode.Stepped),
-		KeyframeUtil.GetNew (0.4f,  0, TangentMode.Stepped)
-	};
-
 
 	[MenuItem("Assets/animation")]
 	public static void createAnimation(){
@@ -52,7 +44,9 @@ public class CreateAnimation : Editor {
 		}
 
 		//this will be linear curve, so need to update tangents (should be after keyframes assignments)
-		CurveUtil.UpdateAllLinearTangents(positionLineCurve);
+		positionLineCurve.UpdateAllLinearTangents();
+
+
 
 		animationClip.SetCurve(CUBE1_NAME, typeof(GameObject),"m_IsActive", activeCurve);
 		animationClip.SetCurve(CUBE2_NAME, typeof(Transform),"localPosition.x", positionLineCurve);
